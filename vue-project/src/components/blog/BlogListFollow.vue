@@ -1,6 +1,6 @@
 <template>
   <div id="blog-list">
-    <h1><br><br><br>所有博客</h1>
+    <h1>关注博客</h1>
 
     <el-row :gutter="30">
       <!-- 单个的卡片列 -->
@@ -34,16 +34,16 @@
               :key="index"
               class=""><!-- 0 == flag || item.courseType == flag ? '' : 'hide' -->
         <!-- card div -->
-        <router-link :to="'/home/blog/' + item.text">
-          <div class="course" >
+        <router-link :to="'/index/blog/' + item.text">
+          <div class="blog" >
             <!-- info div -->
-            <div class="course-info">
+            <div class="blog-info">
               <!-- class name div -->
-              <div class="course-name">
+              <div class="text">
                 {{item.text}}
               </div>
               <!-- teacher name div -->
-              <div class="teacher-name">
+              <div class="content">
                 {{item.content}}
               </div>
             </div>
@@ -57,7 +57,7 @@
 
 <script>
 export default {
-  name: 'BlogList',
+  name: 'BlogListFollow',
   data () {
     return {
       currentPage: 1,
@@ -79,7 +79,7 @@ export default {
     },
     handleBlogList () {
       var self = this
-      self.$axios.get('/api/findAllB')
+      self.$axios.get('http://localhost:8443/api/findAllB')
         .then(function (response) {
           self.blogList = response.data.data
         })
@@ -88,7 +88,7 @@ export default {
         })
     },
     handleClick (row) {
-      this.$router.push('/home/blog/' + row.text)
+      this.$router.push('/index/blog/' + row.text)
     }
 
   }

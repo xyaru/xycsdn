@@ -1,19 +1,17 @@
 <template>
-  <body id="poster">
+<!--  <body id="poster">-->
   <div>
     <nav-menu></nav-menu>
-    <LSideMenu></LSideMenu>
     <router-view/>
   </div>
-  </body>
+<!--  </body>-->
 </template>
 
 <script>
 import NavMenu from './common/NavMenu'
-import LSideMenu from './common/LSideMenu'
 export default {
   name: 'HelloWorld',
-  components: {LSideMenu, NavMenu}
+  components: {NavMenu}
 }
 </script>
 

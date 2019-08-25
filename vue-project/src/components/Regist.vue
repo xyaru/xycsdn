@@ -1,5 +1,5 @@
 <template>
-  <body id="poster">
+<!--  <body id="poster">-->
   <el-form class="regist-container" label-position="left"
            label-width="0px">
     <h3 class="regist_title">注册博客</h3>
@@ -16,10 +16,10 @@
                 auto-complete="off" placeholder="确认密码"></el-input>
     </el-form-item>
     <el-form-item style="width: 100%">
-      <el-button type="primary" style="width: 100%;background: #505458;border: none" v-on:click="login">注册</el-button>
+      <el-button type="primary" style="width: 100%;background: dodgerblue;border: none" v-on:click="login">注册</el-button>
     </el-form-item>
   </el-form>
-  </body>
+<!--  </body>-->
 </template>
 
 <script>

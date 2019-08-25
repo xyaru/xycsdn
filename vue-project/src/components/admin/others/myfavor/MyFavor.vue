@@ -1,12 +1,10 @@
 <template>
-    <div id="otherList">
-      <br><br><br>anotherList
-    </div>
+  <p>he likes it</p>
 </template>
 
 <script>
 export default {
-  name: 'OtherList'
+  name: 'MyFavor'
 }
 </script>
 
