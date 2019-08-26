@@ -40,14 +40,15 @@ export default {
       var _this = this
       console.log(this.$store.state)
       this.$axios
-        .post('http://localhost:8443/api/login', {
-          username: this.loginForm.username,
-          password: this.loginForm.password
+        .post('http://localhost:8443/api/register', {
+          username: this.registForm.username,
+          password: this.registForm.password,
+          surepswd: this.registForm.repasswd
         })
         .then(successResponse => {
           if (successResponse.data.code === 200) {
             alert('登录成功')
-            _this.$store.commit('login', _this.loginForm)
+            _this.$store.commit('login', _this.registForm)
             var path = this.$route.query.redirect
             this.$router.replace({path: path === '/' || path === undefined ? '/index' : path})
           } else {

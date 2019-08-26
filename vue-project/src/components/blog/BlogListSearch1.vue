@@ -1,16 +1,16 @@
 <template>
   <div id="blog-list">
-    <h1>推荐博客</h1>
+    <h1>搜索博客</h1>
 
-    <el-row :gutter="30">
+    <el-row :gutter="0" type="flex" justify="center">
       <!-- 单个的卡片列 -->
-      <div class="container">
+      <div class="container" v-if="show">
         <el-table style="width: 100%;"
                   :data="blogList.slice((currentPage-1)*pagesize,currentPage*pagesize)"
         >
         <el-table-column type="index" width="50">
         </el-table-column>
-        <el-table-column label="username" prop="username" width="180">
+        <el-table-column label="user" prop="user" width="180">
         </el-table-column>
         <el-table-column label="title" prop="title" width="180">
         </el-table-column>
@@ -34,17 +34,17 @@
 <!--              :key="index"-->
 <!--              class="">&lt;!&ndash; 0 == flag || item.courseType == flag ? '' : 'hide' &ndash;&gt;-->
 <!--        &lt;!&ndash; card div &ndash;&gt;-->
-<!--        <router-link :to="'/index/blog/' + item._id">-->
+<!--        <router-link :to="'/index/blog/' + item.text">-->
 <!--          <div class="blog" >-->
 <!--            &lt;!&ndash; info div &ndash;&gt;-->
 <!--            <div class="blog-info">-->
 <!--              &lt;!&ndash; class name div &ndash;&gt;-->
-<!--              <div class="user">-->
-<!--                {{item.username}}-->
+<!--              <div class="text">-->
+<!--                {{item.text}}-->
 <!--              </div>-->
 <!--              &lt;!&ndash; teacher name div &ndash;&gt;-->
-<!--              <div class="title">-->
-<!--                {{item.title}}-->
+<!--              <div class="content">-->
+<!--                {{item.content}}-->
 <!--              </div>-->
 <!--            </div>-->
 <!--          </div>-->
@@ -57,7 +57,7 @@
 
 <script>
 export default {
-  name: 'BlogListRecommend',
+  name: 'BlogListSearch',
   data () {
     return {
       currentPage: 1,
@@ -79,9 +79,17 @@ export default {
     },
     handleBlogList () {
       var self = this
-      self.$axios.get('http://localhost:8443/api/findAllBlog')
+      self.$axios.get('http://localhost:8443/api/findByNameLike')
         .then(function (response) {
-          self.blogList = response.data.data
+          if (response.data.code === 200) {
+            self.show = true
+            self.blogList = response.data.data
+          } else if (response.data.code === 400) {
+            self.show = false
+            alert(response.data.message)
+          } else {
+            alert('code = ' + response.data.code)
+          }
         })
         .catch(function (error) {
           alert(error)

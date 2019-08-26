@@ -10,7 +10,7 @@
     </el-menu-item>
     <el-menu-item index="1" style="color: gray" v-on:click="gotoFowllow">
       <i class="el-icon-menu"></i>
-      <span slot="title">关注</span>
+      <span slot="title">收藏</span>
     </el-menu-item>
     <el-menu-item index="2" style="color: gray">
       <i class="el-icon-menu"></i>

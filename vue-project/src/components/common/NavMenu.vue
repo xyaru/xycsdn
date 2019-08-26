@@ -23,10 +23,10 @@
     <!--    -->
     <!--    -->
     <!--    -->
-    <router-link v-if="!username" :to="{ path: 'login' }" style="color: dodgerblue;float: right;padding: 20px;">登录</router-link>
-    <router-link v-if="!username" :to="{ path: 'regist' }" style="color: dodgerblue;float: right;padding: 20px;">注册</router-link>
+    <router-link v-if="!username" :to="{ path: '/login' }" style="color: dodgerblue;float: right;padding: 20px;">登录</router-link>
+    <router-link v-if="!username" :to="{ path: '/regist' }" style="color: dodgerblue;float: right;padding: 20px;">注册</router-link>
     <el-button v-if="username" type="text" @click="open" style="color: dodgerblue;float: right;padding: 22px">注销</el-button>
-    <router-link v-if="username" :to="{ path: 'admin' }"  @click="showWarn('/admin')" style="color: dodgerblue;float: right;padding: 20px">{{username}}</router-link>
+    <router-link v-if="username" :to="{ path: '/admin' }"  @click="showWarn('/admin')" style="color: dodgerblue;float: right;padding: 20px">{{username}}</router-link>
     <i class="el-icon-menu" style="float:right;font-size: 45px;color: #222;padding-top: 8px;color: dodgerblue"></i>
 <!--    <span style="position: absolute;padding-top: 20px;right: 43%;font-size: 20px;font-weight: bold;color: cornflowerblue">技术分享博客网站</span>-->
   </el-menu>

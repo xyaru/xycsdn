@@ -29,27 +29,27 @@
         layout="total, sizes, prev, pager, next, jumper"
         :total="blogList.length">    //这是显示总共有多少数据，
         </el-pagination>
-      <el-col :span="6" v-for="(item, index) in blogList"
-              :index="index"
-              :key="index"
-              class=""><!-- 0 == flag || item.courseType == flag ? '' : 'hide' -->
-        <!-- card div -->
-        <router-link :to="'/index/user/' + item.username">
-          <div class="user" >
-            <!-- info div -->
-            <div class="user-info">
-              <!-- class name div -->
-              <div class="username">
-                {{item.username}}
-              </div>
-              <!-- teacher name div -->
-              <div class="password">
-                {{item.password}}
-              </div>
-            </div>
-          </div>
-        </router-link>
-      </el-col>
+<!--      <el-col :span="6" v-for="(item, index) in blogList"-->
+<!--              :index="index"-->
+<!--              :key="index"-->
+<!--              class="">&lt;!&ndash; 0 == flag || item.courseType == flag ? '' : 'hide' &ndash;&gt;-->
+<!--        &lt;!&ndash; card div &ndash;&gt;-->
+<!--        <router-link :to="'/index/user/' + item.username">-->
+<!--          <div class="user" >-->
+<!--            &lt;!&ndash; info div &ndash;&gt;-->
+<!--            <div class="user-info">-->
+<!--              &lt;!&ndash; class name div &ndash;&gt;-->
+<!--              <div class="username">-->
+<!--                {{item.username}}-->
+<!--              </div>-->
+<!--              &lt;!&ndash; teacher name div &ndash;&gt;-->
+<!--              <div class="password">-->
+<!--                {{item.password}}-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </router-link>-->
+<!--      </el-col>-->
       </div>
     </el-row>
   </div>
@@ -62,7 +62,8 @@ export default {
     return {
       currentPage: 1,
       pagesize: 10,
-      blogList: []
+      blogList: [],
+      input: this.$route.params.input
     }
   },
   created: function () {
@@ -79,9 +80,15 @@ export default {
     },
     handleBlogList () {
       var self = this
-      self.$axios.get('http://localhost:8443/api/findAll')
+      self.$axios.post('http://localhost:8443/api/findByNameLike', {
+        username: this.input
+      })
         .then(function (response) {
-          self.blogList = response.data.data
+          if (response.data.code === 200) {
+            self.blogList = response.data.data
+          } else {
+            alert('user not found')
+          }
         })
         .catch(function (error) {
           alert(error)

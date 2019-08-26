@@ -1,7 +1,8 @@
 <template>
   <section class="p-user-data">
     <img :src="imgSrc">
-    <div class="btn" @click="follow">关注</div>
+    <div class="btn" v-if="!isFollowed" @click="follow">关注</div>
+    <div class="btn1" v-if="isFollowed" @click="unfollow">取消关注</div>
   </section>
 </template>
 
@@ -13,12 +14,68 @@ export default {
       imgSrc: 'http://www.luckly-mjw.cn/baseSource/picture-avatar-03.png',
       userInfo: {},
       myUserId: this.$store.state.user.username,
-      userId: this.$route.params.username
+      userId: this.$route.params.username,
+      isFollowed: false
     }
+  },
+  mounted () {
+    this.checkFollowed()
   },
   methods: {
     follow: function () {
-      alert(this.myUserId + ' is going to follow ' + this.userId)
+      var self = this
+      self.$axios.post('http://localhost:8443/api/followOne', {
+        usernameOne: this.myUserId,
+        usernameTwo: this.userId
+      })
+        .then(function (response) {
+          if (response.data.code === 200) {
+            alert(this.myUserId + ' has just followed ' + this.userId)
+          } else {
+            alert('code = ' + response.data.code)
+          }
+        })
+        .catch(function (error) {
+          alert(error)
+        }
+        )
+    },
+    unfollow: function () {
+      var self = this
+      self.$axios.post('http://localhost:8443/api/followOne', {
+        usernameOne: this.myUserId,
+        usernameTwo: this.userId
+      })
+        .then(function (response) {
+          if (response.data.code === 200) {
+            alert(this.myUserId + ' has just stop following ' + this.userId)
+          } else {
+            alert('code = ' + response.data.code)
+          }
+        })
+        .catch(function (error) {
+          alert(error)
+        }
+        )
+    },
+    checkFollowed: function () {
+      var self = this
+      self.$axios.post('http://localhost:8443/api/followOne', {
+        usernameOne: this.myUserId,
+        usernameTwo: this.userId
+      })
+        .then(function (response) {
+          if (response.data.code === 200) {
+            alert(this.myUserId + ' has followed ' + this.userId)
+            self.isFollowed = true
+          } else {
+            self.isFollowed = false
+          }
+        })
+        .catch(function (error) {
+          alert(error)
+        }
+        )
     }
   }
 }
@@ -36,6 +93,21 @@ export default {
       background-repeat: round;
     }
     .btn {
+      display: block;
+      float: left;
+      margin-left: 200px;
+      margin-top: 20px;
+      width: 100px;
+      height: 20px;
+      line-height: 10px;
+      font-size: 12px;
+      color: white;
+      border-radius: 4px;
+      text-align: center;
+      box-sizing: border-box;
+      background-color: #3D8AC7;
+    }
+    .btn1 {
       display: block;
       float: left;
       margin-left: 200px;

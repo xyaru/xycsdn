@@ -99,7 +99,8 @@ export default {
           // console.log(typeof aa)
           // console.log(JSON.parse(aa))
           this.$axios
-            .post('http://localhost:8443/api/write', {
+            .post('http://localhost:8443/api/post', {
+              username: this.$store.state.user.username,
               title: this.title,
               content: $('#summernote').summernote('code')
             })

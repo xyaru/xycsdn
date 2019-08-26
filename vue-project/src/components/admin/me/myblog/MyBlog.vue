@@ -1,9 +1,9 @@
 <template>
   <div>
     <br>
-    <h3 style="float: left;margin-left: 200px">我的收藏</h3>
+    <h3 style="float: left;margin-left: 200px">我的博客</h3>
     <hr style="margin-top: 80px;margin-left: 200px">
-    <div v-if="favors==='0'">
+    <div v-if="blogs==='0'">
       <br>
       <br>
       <br>
@@ -17,10 +17,10 @@
 
 <script>
 export default {
-  name: 'MyFavor',
+  name: 'MyBlog',
   data () {
     return {
-      favors: '0'
+      blogs: '0'
     }
   }
 }

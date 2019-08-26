@@ -1,17 +1,18 @@
 <template>
   <div id="blog-list">
-    <h1>收藏博客</h1>
+    <h1>ta的关注</h1>
 
-    <el-row :gutter="30">
+    <el-row :gutter="0" type="flex" justify="center">
       <!-- 单个的卡片列 -->
-      <div class="container" v-if="show">
+      <div class="cantainer">
         <el-table style="width: 100%;"
-                  :data="blogList.slice((currentPage-1)*pagesize,currentPage*pagesize)">
+                  :data="blogList.slice((currentPage-1)*pagesize,currentPage*pagesize)"
+        >
           <el-table-column type="index" width="50">
           </el-table-column>
-          <el-table-column label="username" prop="username" width="180">
+          <el-table-column label="user" prop="username" width="180">
           </el-table-column>
-          <el-table-column label="title" prop="title" width="180">
+          <el-table-column label="password" prop="password" width="180">
           </el-table-column>
           <el-table-column label="操作" width="180">
             <template slot-scope="scope">
@@ -33,17 +34,17 @@
         <!--              :key="index"-->
         <!--              class="">&lt;!&ndash; 0 == flag || item.courseType == flag ? '' : 'hide' &ndash;&gt;-->
         <!--        &lt;!&ndash; card div &ndash;&gt;-->
-        <!--        <router-link :to="'/index/blog/' + item._id">-->
-        <!--          <div class="blog" >-->
+        <!--        <router-link :to="'/index/user/' + item.username">-->
+        <!--          <div class="user" >-->
         <!--            &lt;!&ndash; info div &ndash;&gt;-->
-        <!--            <div class="blog-info">-->
+        <!--            <div class="user-info">-->
         <!--              &lt;!&ndash; class name div &ndash;&gt;-->
-        <!--              <div class="user">-->
+        <!--              <div class="username">-->
         <!--                {{item.username}}-->
         <!--              </div>-->
         <!--              &lt;!&ndash; teacher name div &ndash;&gt;-->
-        <!--              <div class="title">-->
-        <!--                {{item.title}}-->
+        <!--              <div class="password">-->
+        <!--                {{item.password}}-->
         <!--              </div>-->
         <!--            </div>-->
         <!--          </div>-->
@@ -55,54 +56,51 @@
 </template>
 
 <script>
-export default {
-  name: 'BlogListFollow',
-  data () {
-    return {
-      currentPage: 1,
-      pagesize: 10,
-      blogList: [],
-      show: true
-    }
-  },
-  created: function () {
-    this.handleBlogList()
-  },
-  methods: {
-    handleSizeChange: function (size) {
-      this.pagesize = size
-      console.log(this.pagesize)
+  export default {
+    name: 'UserSearch',
+    data () {
+      return {
+        currentPage: 1,
+        pagesize: 10,
+        blogList: [],
+        input: this.$route.params.input
+      }
     },
-    handleCurrentChange: function (currentPage) {
-      this.currentPage = currentPage
-      console.log(this.currentPage)
+    created: function () {
+      this.handleBlogList()
     },
-    handleBlogList () {
-      var self = this
-      self.$axios.post('http://localhost:8443/api/ClBlogs', {
-        username: this.$store.state.user.username
-      })
-        .then(function (response) {
-          if (response.data.code === 200) {
-            self.show = true
-            self.blogList = response.data.data
-          } else if (response.data.code === 400) {
-            self.show = false
-            alert(response.data.message)
-          } else {
-            alert('code = ' + response.data.code)
-          }
+    methods: {
+      handleSizeChange: function (size) {
+        this.pagesize = size
+        console.log(this.pagesize)
+      },
+      handleCurrentChange: function (currentPage) {
+        this.currentPage = currentPage
+        console.log(this.currentPage)
+      },
+      handleBlogList () {
+        var self = this
+        self.$axios.post('http://localhost:8443/api/findByNameLike', {
+          username: this.input
         })
-        .catch(function (error) {
-          alert(error)
-        })
-    },
-    handleClick (row) {
-      this.$router.push('/index/blog/' + row._id)
+          .then(function (response) {
+            if (response.data.code === 200) {
+              self.blogList = response.data.data
+            } else {
+              alert('user not found')
+            }
+          })
+          .catch(function (error) {
+            alert(error)
+          })
+      },
+      handleClick (row) {
+        this.$router.push('/admin/' + row.username)
+      }
+
     }
 
   }
-}
 </script>
 
 <style scoped>
