@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-container>
-      <el-aside>
+      <el-aside width="150px">
         <LSideMenu></LSideMenu>
       </el-aside>
       <el-main>
@@ -17,6 +17,9 @@ export default {
   name: 'index',
   components: {
     LSideMenu
+  },
+  mounted () {
+    window.localStorage.setItem('bid', 'goudan')
   }
 }
 </script>

@@ -1,6 +1,7 @@
 <template>
   <div id="blog-list">
-    <h1>我的博客</h1>
+    <h1>有关{{type}}的博客</h1>
+
     <el-row :gutter="0" type="flex" justify="center">
       <!-- 单个的卡片列 -->
       <div class="container" v-if="show">
@@ -27,6 +28,27 @@
           layout="total, sizes, prev, pager, next, jumper"
           :total="blogList.length">    //这是显示总共有多少数据，
         </el-pagination>
+        <!--      <el-col :span="6" v-for="(item, index) in blogList"-->
+        <!--              :index="index"-->
+        <!--              :key="index"-->
+        <!--              class="">&lt;!&ndash; 0 == flag || item.courseType == flag ? '' : 'hide' &ndash;&gt;-->
+        <!--        &lt;!&ndash; card div &ndash;&gt;-->
+        <!--        <router-link :to="'/index/blog/' + item._id">-->
+        <!--          <div class="blog" >-->
+        <!--            &lt;!&ndash; info div &ndash;&gt;-->
+        <!--            <div class="blog-info">-->
+        <!--              &lt;!&ndash; class name div &ndash;&gt;-->
+        <!--              <div class="user">-->
+        <!--                {{item.username}}-->
+        <!--              </div>-->
+        <!--              &lt;!&ndash; teacher name div &ndash;&gt;-->
+        <!--              <div class="title">-->
+        <!--                {{item.title}}-->
+        <!--              </div>-->
+        <!--            </div>-->
+        <!--          </div>-->
+        <!--        </router-link>-->
+        <!--      </el-col>-->
       </div>
     </el-row>
   </div>
@@ -34,13 +56,14 @@
 
 <script>
 export default {
-  name: 'BlogListFollow',
+  name: 'BlogListType',
   data () {
     return {
       currentPage: 1,
       pagesize: 10,
       blogList: [],
-      show: true
+      show: true,
+      type: this.$route.params.blogType
     }
   },
   created: function () {
@@ -57,8 +80,8 @@ export default {
     },
     handleBlogList () {
       var self = this
-      self.$axios.post('http://localhost:8443/api/myBlogs', {
-        username: self.$store.state.user.username
+      self.$axios.post('http://localhost:8443/api/searchType', {
+        type: this.type
       })
         .then(function (response) {
           if (response.data.code === 200) {

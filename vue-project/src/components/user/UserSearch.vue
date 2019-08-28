@@ -1,13 +1,12 @@
 <template>
-  <div id="blog-list">
+  <div id="blog-list" v-if="show">
     <h1>搜索用户</h1>
 
     <el-row :gutter="0" type="flex" justify="center">
       <!-- 单个的卡片列 -->
-      <div class="cantainer">
+      <div class="container">
         <el-table style="width: 100%;"
-                  :data="blogList.slice((currentPage-1)*pagesize,currentPage*pagesize)"
-        >
+                  :data="blogList.slice((currentPage-1)*pagesize,currentPage*pagesize)">
         <el-table-column type="index" width="50">
         </el-table-column>
         <el-table-column label="user" prop="username" width="180">
@@ -63,10 +62,11 @@ export default {
       currentPage: 1,
       pagesize: 10,
       blogList: [],
-      input: this.$route.params.input
+      input: this.$route.params.input,
+      show: false
     }
   },
-  created: function () {
+  mounted () {
     this.handleBlogList()
   },
   methods: {
@@ -85,9 +85,14 @@ export default {
       })
         .then(function (response) {
           if (response.data.code === 200) {
+            self.show = true
             self.blogList = response.data.data
           } else {
-            alert('user not found')
+            self.show = false
+            self.$message({
+              type: 'warning',
+              message: '无结果'
+            })
           }
         })
         .catch(function (error) {
@@ -95,7 +100,7 @@ export default {
         })
     },
     handleClick (row) {
-      this.$router.push('/admin/' + row.username)
+      this.$router.push('/user/' + row.username)
     }
 
   }

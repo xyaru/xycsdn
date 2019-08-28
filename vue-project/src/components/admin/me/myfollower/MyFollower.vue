@@ -4,7 +4,7 @@
 
     <el-row :gutter="0" type="flex" justify="center">
       <!-- 单个的卡片列 -->
-      <div class="cantainer">
+      <div class="container">
         <el-table style="width: 100%;"
                   :data="blogList.slice((currentPage-1)*pagesize,currentPage*pagesize)"
         >
@@ -29,78 +29,57 @@
           layout="total, sizes, prev, pager, next, jumper"
           :total="blogList.length">    //这是显示总共有多少数据，
         </el-pagination>
-        <!--      <el-col :span="6" v-for="(item, index) in blogList"-->
-        <!--              :index="index"-->
-        <!--              :key="index"-->
-        <!--              class="">&lt;!&ndash; 0 == flag || item.courseType == flag ? '' : 'hide' &ndash;&gt;-->
-        <!--        &lt;!&ndash; card div &ndash;&gt;-->
-        <!--        <router-link :to="'/index/user/' + item.username">-->
-        <!--          <div class="user" >-->
-        <!--            &lt;!&ndash; info div &ndash;&gt;-->
-        <!--            <div class="user-info">-->
-        <!--              &lt;!&ndash; class name div &ndash;&gt;-->
-        <!--              <div class="username">-->
-        <!--                {{item.username}}-->
-        <!--              </div>-->
-        <!--              &lt;!&ndash; teacher name div &ndash;&gt;-->
-        <!--              <div class="password">-->
-        <!--                {{item.password}}-->
-        <!--              </div>-->
-        <!--            </div>-->
-        <!--          </div>-->
-        <!--        </router-link>-->
-        <!--      </el-col>-->
       </div>
     </el-row>
   </div>
 </template>
 
 <script>
-  export default {
-    name: 'UserSearch',
-    data () {
-      return {
-        currentPage: 1,
-        pagesize: 10,
-        blogList: [],
-        input: this.$route.params.input
-      }
+export default {
+  name: 'UserSearch',
+  data () {
+    return {
+      currentPage: 1,
+      pagesize: 10,
+      blogList: [],
+      input: this.$route.params.input
+    }
+  },
+  created: function () {
+    this.handleBlogList()
+  },
+  methods: {
+    handleSizeChange: function (size) {
+      this.pagesize = size
+      console.log(this.pagesize)
     },
-    created: function () {
-      this.handleBlogList()
+    handleCurrentChange: function (currentPage) {
+      this.currentPage = currentPage
+      console.log(this.currentPage)
     },
-    methods: {
-      handleSizeChange: function (size) {
-        this.pagesize = size
-        console.log(this.pagesize)
-      },
-      handleCurrentChange: function (currentPage) {
-        this.currentPage = currentPage
-        console.log(this.currentPage)
-      },
-      handleBlogList () {
-        var self = this
-        self.$axios.post('http://localhost:8443/api/findByNameLike', {
-          username: this.input
+    handleBlogList () {
+      var self = this
+      self.$axios.post('http://localhost:8443/api/findByNameLike', {
+        username: this.input
+      })
+        .then(function (response) {
+          if (response.data.code === 200) {
+            self.blogList = response.data.data
+          } else {
+            alert('no folllower')
+          }
         })
-          .then(function (response) {
-            if (response.data.code === 200) {
-              self.blogList = response.data.data
-            } else {
-              alert('user not found')
-            }
-          })
-          .catch(function (error) {
-            alert(error)
-          })
-      },
-      handleClick (row) {
-        this.$router.push('/admin/' + row.username)
-      }
-
+        .catch(function (error) {
+          alert(error)
+        })
+    },
+    handleClick (row) {
+      this.$router.push('/admin/' + row.username)
     }
 
   }
+
+}
 </script>
 
 <style scoped>

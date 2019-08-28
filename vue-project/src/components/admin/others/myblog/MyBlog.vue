@@ -17,7 +17,7 @@
 
 <script>
 export default {
-  name: 'MyBlog',
+  name: 'OthersBlog',
   data () {
     return {
       blogs: '0'

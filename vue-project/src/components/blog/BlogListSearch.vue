@@ -1,57 +1,60 @@
 <template>
-  <div id="blog-list">
-    <h1>搜索博客</h1>
+  <div>
+    <div id="blog-list" v-if="show">
+      <h1>搜索博客</h1>
 
-    <el-row :gutter="0" type="flex" justify="center">
-      <!-- 单个的卡片列 -->
-      <div class="container" v-if="show">
-        <el-table style="width: 100%;"
-                  :data="blogList.slice((currentPage-1)*pagesize,currentPage*pagesize)"
-        >
-        <el-table-column type="index" width="50">
-        </el-table-column>
-        <el-table-column label="author" prop="username" width="180">
-        </el-table-column>
-        <el-table-column label="title" prop="title" width="180">
-        </el-table-column>
-        <el-table-column label="操作" width="180">
-          <template slot-scope="scope">
-            <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
-          </template>
-        </el-table-column>
-        </el-table>
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="currentPage"
-          :page-sizes="[5, 10, 20, 40]"
-        :page-size="pagesize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="blogList.length">    //这是显示总共有多少数据，
-        </el-pagination>
-<!--      <el-col :span="6" v-for="(item, index) in blogList"-->
-<!--              :index="index"-->
-<!--              :key="index"-->
-<!--              class="">&lt;!&ndash; 0 == flag || item.courseType == flag ? '' : 'hide' &ndash;&gt;-->
-<!--        &lt;!&ndash; card div &ndash;&gt;-->
-<!--        <router-link :to="'/index/blog/' + item.text">-->
-<!--          <div class="blog" >-->
-<!--            &lt;!&ndash; info div &ndash;&gt;-->
-<!--            <div class="blog-info">-->
-<!--              &lt;!&ndash; class name div &ndash;&gt;-->
-<!--              <div class="text">-->
-<!--                {{item.text}}-->
-<!--              </div>-->
-<!--              &lt;!&ndash; teacher name div &ndash;&gt;-->
-<!--              <div class="content">-->
-<!--                {{item.content}}-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </router-link>-->
-<!--      </el-col>-->
-      </div>
-    </el-row>
+      <el-row :gutter="0" type="flex" justify="center">
+        <!-- 单个的卡片列 -->
+        <div class="container" v-if="show">
+          <el-table style="width: 100%;"
+                    :data="blogList.slice((currentPage-1)*pagesize,currentPage*pagesize)"
+          >
+            <el-table-column type="index" width="50">
+            </el-table-column>
+            <el-table-column label="author" prop="username" width="180">
+            </el-table-column>
+            <el-table-column label="title" prop="title" width="180">
+            </el-table-column>
+            <el-table-column label="操作" width="180">
+              <template slot-scope="scope">
+                <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-sizes="[5, 10, 20, 40]"
+            :page-size="pagesize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="blogList.length">    //这是显示总共有多少数据，
+          </el-pagination>
+          <!--      <el-col :span="6" v-for="(item, index) in blogList"-->
+          <!--              :index="index"-->
+          <!--              :key="index"-->
+          <!--              class="">&lt;!&ndash; 0 == flag || item.courseType == flag ? '' : 'hide' &ndash;&gt;-->
+          <!--        &lt;!&ndash; card div &ndash;&gt;-->
+          <!--        <router-link :to="'/index/blog/' + item.text">-->
+          <!--          <div class="blog" >-->
+          <!--            &lt;!&ndash; info div &ndash;&gt;-->
+          <!--            <div class="blog-info">-->
+          <!--              &lt;!&ndash; class name div &ndash;&gt;-->
+          <!--              <div class="text">-->
+          <!--                {{item.text}}-->
+          <!--              </div>-->
+          <!--              &lt;!&ndash; teacher name div &ndash;&gt;-->
+          <!--              <div class="content">-->
+          <!--                {{item.content}}-->
+          <!--              </div>-->
+          <!--            </div>-->
+          <!--          </div>-->
+          <!--        </router-link>-->
+          <!--      </el-col>-->
+        </div>
+      </el-row>
+    </div>
+    <div v-if="!show">无结果</div>
   </div>
 </template>
 
@@ -67,7 +70,7 @@ export default {
       show: true
     }
   },
-  created: function () {
+  mounted () {
     this.handleBlogList()
   },
   methods: {
@@ -90,7 +93,10 @@ export default {
             self.blogList = response.data.data
           } else if (response.data.code === 400) {
             self.show = false
-            alert(response.data.message)
+            self.$message({
+              type: 'warning',
+              message: '无结果'
+            })
           } else {
             alert('code = ' + response.data.code)
           }

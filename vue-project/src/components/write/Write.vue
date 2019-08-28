@@ -11,6 +11,14 @@
     </el-input>
     <div style="margin: 20px 0;"></div>
     <div id="summernote"></div>
+    <el-select v-model="value" placeholder="请选择分类" style="float: left">
+      <el-option
+        v-for="item in options"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value">
+      </el-option>
+    </el-select>
     <el-button @click="saveTemp" style="float: right; margin-right: 2%">保存草稿</el-button>
     <el-button @click="postMe" style="float: right; margin-right: 2%">发表</el-button>
   </div>
@@ -23,7 +31,25 @@ export default {
   name: 'Write',
   data () {
     return {
-      title: window.localStorage.getItem('draft_t')
+      title: window.localStorage.getItem('draft_t'),
+      bid: window.localStorage.getItem('bid'),
+      options: [{
+        value: 'Vue',
+        label: 'Vue'
+      }, {
+        value: 'Springboot',
+        label: 'Springboot'
+      }, {
+        value: 'MongoDB',
+        label: 'MongoDB'
+      }, {
+        value: 'HTML',
+        label: 'HTML'
+      }, {
+        value: 'Others',
+        label: '杂项'
+      }],
+      value: ''
     }
   },
   mounted () {
@@ -95,45 +121,59 @@ export default {
             message: '请填写内容'
           })
         } else {
+          if (this.value === '') {
+            this.$message({
+              type: 'warning',
+              message: '请选择分类'
+            })
+          } else {
+            window.localStorage.setItem('bid', 'goudan')
+            this.$axios
+              .post('http://localhost:8443/api/post', {
+                username: this.$store.state.user.username,
+                title: this.title,
+                content: $('#summernote').summernote('code'),
+                _id: this.bid,
+                type: this.value
+              })
+              .then(successResponse => {
+                if (successResponse.data.code === 200) {
+                  this.$message({
+                    type: 'success',
+                    message: '发表成功!'
+                  })
+                  window.localStorage.removeItem('draft')
+                  window.localStorage.removeItem('draft_t')
+                  // if (successResponse.data.data === $('#summernote').summernote('code')) {
+                  //   this.$message({
+                  //     type: 'success',
+                  //     message: '回收成功'
+                  //   })
+                  // }
+                  if (this.bid === 'goudan') {
+                    this.$router.replace({path: '/index'})
+                  } else {
+                    this.$router.replace({path: '/admin'})
+                  }
+                } else {
+                  this.$message({
+                    type: 'error',
+                    message: '发表失败!已保存为草稿'
+                  })
+                  window.localStorage.setItem('draft_t', this.title)
+                  window.localStorage.setItem('draft', $('#summernote').summernote('code'))
+                }
+              })
+              .catch(failResponse => {
+                this.$message({
+                  type: 'error',
+                  message: '服务器错误'
+                })
+              })
+          }
           // var aa = $('.summernote').summernote('code')
           // console.log(typeof aa)
           // console.log(JSON.parse(aa))
-          this.$axios
-            .post('http://localhost:8443/api/post', {
-              username: this.$store.state.user.username,
-              title: this.title,
-              content: $('#summernote').summernote('code')
-            })
-            .then(successResponse => {
-              if (successResponse.data.code === 200) {
-                this.$message({
-                  type: 'success',
-                  message: '发表成功!'
-                })
-                window.localStorage.removeItem('draft')
-                window.localStorage.removeItem('draft_t')
-                // if (successResponse.data.data === $('#summernote').summernote('code')) {
-                //   this.$message({
-                //     type: 'success',
-                //     message: '回收成功'
-                //   })
-                // }
-                this.$router.replace({path: '/index'})
-              } else {
-                this.$message({
-                  type: 'error',
-                  message: '发表失败!已保存为草稿'
-                })
-                window.localStorage.setItem('draft_t', this.title)
-                window.localStorage.setItem('draft', $('#summernote').summernote('code'))
-              }
-            })
-            .catch(failResponse => {
-              this.$message({
-                type: 'error',
-                message: '服务器错误'
-              })
-            })
         }
       }
     }

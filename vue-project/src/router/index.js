@@ -8,12 +8,18 @@ import Write from '../components/write/Write'
 import Index from '../components/index/index'
 import Admin from '../components/admin/me/Admin'
 import AdminOthers from '../components/admin/others/Admin'
-import Blog from '../components/blog/Blog'
 import BlogListRecommend from '../components/blog/BlogListRecommend'
 import BlogListFollow from '../components/blog/BlogListFollow'
 import BlogListSearch from '../components/blog/BlogListSearch'
 import BlogListSearch1 from '../components/blog/BlogListSearch1'
 import UserSearch from '../components/user/UserSearch'
+import Blog from '../components/blog/Blog'
+import BlogListType from '../components/blog/BlogListType'
+import MyBlog from '../components/admin/me/myblog/MyBlog'
+import MyFollower from '../components/admin/me/myfollower/MyFollower'
+import MyFollowing from '../components/admin/me/myfollowing/MyFollowing'
+import MyMessage from '../components/admin/me/mymessage/MyMessage'
+import MyProfile from '../components/admin/me/myprofile/MyProfile'
 
 Vue.use(Router)
 
@@ -32,14 +38,19 @@ export default new Router({
           component: Index,
           children: [
             {
-              path: 'blog/listRecommend',
+              path: 'blogList/listRecommend',
               name: 'BlogListRecommend',
               component: BlogListRecommend
             },
             {
-              path: 'blog/listFollow',
+              path: 'blogList/listFollow',
               name: 'BlogListFollow',
               component: BlogListFollow
+            },
+            {
+              path: 'blogList/:blogType',
+              name: 'BlogListType',
+              component: BlogListType
             },
             {
               path: 'blog/:blogNo',
@@ -84,12 +95,44 @@ export default new Router({
           component: Admin,
           meta: {
             requireAuth: true
-          }
+          },
+          children: [
+            {
+              path: 'myBlog',
+              name: 'MyBlog',
+              component: MyBlog
+            },
+            {
+              path: 'myFollower',
+              name: 'MyFollower',
+              component: MyFollower
+            },
+            {
+              path: 'myFollowing',
+              name: 'MyFollowing',
+              component: MyFollowing
+            },
+            {
+              path: 'myMessage',
+              name: 'MyMessage',
+              component: MyMessage
+            },
+            {
+              path: 'myProfile',
+              name: 'MyProfile',
+              component: MyProfile
+            },
+            {
+              path: 'myFavor',
+              name: 'MyFavor',
+              component: BlogListFollow
+            }
+          ]
         }
       ]
     },
     {
-      path: '/admin/:username',
+      path: '/user/:username',
       name: 'AdminUser',
       component: AdminOthers,
       meta: {

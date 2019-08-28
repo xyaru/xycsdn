@@ -17,7 +17,7 @@
 
 <script>
 export default {
-  name: 'MyFavor',
+  name: 'OthersFavor',
   data () {
     return {
       favors: '0'

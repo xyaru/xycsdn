@@ -1,6 +1,6 @@
 <template>
   <div id="blog-list">
-    <h1>推荐博客</h1>
+    <h1>评论</h1>
 
     <el-row :gutter="30">
       <!-- 单个的卡片列 -->
@@ -29,22 +29,20 @@
 <!--        layout="total, sizes, prev, pager, next, jumper"-->
 <!--        :total="blogList.length">    //这是显示总共有多少数据，-->
 <!--        </el-pagination>-->
-      <el-col :span="24" v-for="(item, index) in blogList"
+      <el-col :span="24" v-for="(item, index) in commentList"
               :index="index"
               :key="index"
               class=""><!-- 0 == flag || item.courseType == flag ? '' : 'hide' -->
         <!-- card div -->
         <router-link :to="'/index/blog/' + item._id">
-          <div class="blog" >
+          <div class="comment" >
             <!-- info div -->
-            <div class="blog-info">
-              <!-- class name div -->
+            <div class="comment-info">
               <div class="user">
                 {{item.username}}
               </div>
-              <!-- teacher name div -->
               <div class="comment">
-                {{item.comment}}
+                {{item.content}}
               </div>
             </div>
           </div>
@@ -62,11 +60,12 @@ export default {
     return {
       currentPage: 1,
       pagesize: 10,
-      commentList: []
+      commentList: [],
+      blog: this.$route.params.blogNo
     }
   },
   created: function () {
-    this.handleBlogList()
+    this.handleCommentList()
   },
   methods: {
     handleSizeChange: function (size) {
@@ -77,9 +76,9 @@ export default {
       this.currentPage = currentPage
       console.log(this.currentPage)
     },
-    handleBlogList () {
+    handleCommentList () {
       var self = this
-      self.$axios.get('http://localhost:8443/api/findAllBlog')
+      self.$axios.post('http://localhost:8443/api/blogReview', {_id: this.blog})
         .then(function (response) {
           self.commentList = response.data.data
         })

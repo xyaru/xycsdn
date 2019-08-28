@@ -10,9 +10,17 @@
         >
         <el-table-column type="index" width="50">
         </el-table-column>
-        <el-table-column label="username" prop="username" width="180">
+        <el-table-column label="contributor" prop="username" width="180">
+          <template slot-scope="scope">
+            <el-button @click="handleClickUser(scope.row)" type="text">{{scope.row.username}}</el-button>
+          </template>
         </el-table-column>
         <el-table-column label="title" prop="title" width="180">
+        </el-table-column>
+        <el-table-column label="type" width="180">
+          <template slot-scope="scope">
+            <el-button @click="handleClickType(scope.row)" type="text">{{scope.row.type}}</el-button>
+          </template>
         </el-table-column>
         <el-table-column label="操作" width="180">
           <template slot-scope="scope">
@@ -89,6 +97,12 @@ export default {
     },
     handleClick (row) {
       this.$router.push('/index/blog/' + row._id)
+    },
+    handleClickType (row) {
+      this.$router.push('/index/blogList/' + row.type)
+    },
+    handleClickUser (row) {
+      this.$router.push('/admin/' + row.username)
     }
 
   }

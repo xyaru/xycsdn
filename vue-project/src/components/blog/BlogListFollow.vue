@@ -1,8 +1,8 @@
 <template>
   <div id="blog-list">
-    <h1>收藏博客</h1>
+    <h1>我的收藏</h1>
 
-    <el-row :gutter="30">
+    <el-row :gutter="0" type="flex" justify="center">
       <!-- 单个的卡片列 -->
       <div class="container" v-if="show">
         <el-table style="width: 100%;"
@@ -80,7 +80,7 @@ export default {
     handleBlogList () {
       var self = this
       self.$axios.post('http://localhost:8443/api/ClBlogs', {
-        username: this.$store.state.user.username
+        username: self.$store.state.user.username
       })
         .then(function (response) {
           if (response.data.code === 200) {

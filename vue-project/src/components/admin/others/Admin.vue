@@ -20,24 +20,24 @@
         <span slot="title" :class="{'textcolor' : activePath === '5'}">ta的博客</span>
       </el-menu-item>
     </el-menu>
-    <MyProfile v-if="activePath === '0'"></MyProfile>
-    <MyFavor v-if="activePath === '1'"></MyFavor>
-    <MyFollowing v-if="activePath === '2'"></MyFollowing>
-    <MyFollower v-if="activePath === '3'"></MyFollower>
-    <MyBlog v-if="activePath === '4'"></MyBlog>
+    <OthersProfile v-if="activePath === '0'"></OthersProfile>
+    <OthersFavor v-if="activePath === '1'"></OthersFavor>
+    <OthersFollowing v-if="activePath === '2'"></OthersFollowing>
+    <OthersFollower v-if="activePath === '3'"></OthersFollower>
+    <OthersBlog v-if="activePath === '4'"></OthersBlog>
   </div>
 </template>
 
 <script>
-import MyProfile from './myprofile/MyProfile'
-import MyFavor from './myfavor/MyFavor'
-import MyMessage from './mymessage/MyMessage'
-import MyFollowing from './myfollowing/MyFollowing'
-import MyFollower from './myfollower/MyFollower'
-import MyBlog from './myblog/MyBlog'
+import OthersProfile from './myprofile/MyProfile'
+import OthersFavor from './myfavor/MyFavor'
+import OthersMessage from './mymessage/MyMessage'
+import OthersFollowing from './myfollowing/MyFollowing'
+import OthersFollower from './myfollower/MyFollower'
+import OthersBlog from './myblog/MyBlog'
 export default {
   name: 'Admin',
-  components: {MyBlog, MyFollower, MyFollowing, MyFavor, MyProfile, MyMessage},
+  components: {OthersBlog, OthersFollower, OthersFollowing, OthersFavor, OthersProfile, OthersMessage},
   data () {
     return {
       activePath: '0'

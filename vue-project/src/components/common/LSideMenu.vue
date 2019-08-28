@@ -1,36 +1,36 @@
 <template>
   <el-menu
     class="categories"
-    default-active="0"
+    default-active="activeIndex"
     background-color="white"
     active-text-color="red">
-    <el-menu-item index="0" style="color: gray" v-on:click="gotoRecommand">
+    <el-menu-item index="0" style="color: gray" v-on:click="gotoList('0', 'listRecommend')">
       <i class="el-icon-menu"></i>
       <span slot="title">推荐</span>
     </el-menu-item>
-    <el-menu-item index="1" style="color: gray" v-on:click="gotoFowllow">
+    <el-menu-item index="1" style="color: gray" v-on:click="gotoList('1', 'listFollow')">
       <i class="el-icon-menu"></i>
       <span slot="title">收藏</span>
     </el-menu-item>
-    <el-menu-item index="2" style="color: gray">
+    <el-menu-item index="2" style="color: gray" v-on:click="gotoList('2', 'Vue')">
       <i class="el-icon-menu"></i>
-      <span slot="title">Python</span>
+      <span slot="title">Vue</span>
     </el-menu-item>
-    <el-menu-item index="3" style="color: gray">
+    <el-menu-item index="3" style="color: gray" v-on:click="gotoList('3', 'Springboot')">
       <i class="el-icon-menu"></i>
-      <span slot="title">Java</span>
+      <span slot="title">Springboot</span>
     </el-menu-item>
-    <el-menu-item index="4" style="color: gray">
+    <el-menu-item index="4" style="color: gray" v-on:click="gotoList('3', 'MongoDB')">
       <i class="el-icon-menu"></i>
-      <span slot="title">前端</span>
+      <span slot="title">MongoDB</span>
     </el-menu-item>
-    <el-menu-item index="5" style="color: gray">
+    <el-menu-item index="5" style="color: gray" v-on:click="gotoList('3', 'HTML')">
       <i class="el-icon-menu"></i>
-      <span slot="title">架构</span>
+      <span slot="title">HTML</span>
     </el-menu-item>
-    <el-menu-item index="6" style="color: gray">
+    <el-menu-item index="6" style="color: gray" v-on:click="gotoList('3', 'Others')">
       <i class="el-icon-menu"></i>
-      <span slot="title">区块链</span>
+      <span slot="title">杂项</span>
     </el-menu-item>
   </el-menu>
 </template>
@@ -38,12 +38,20 @@
 <script>
 export default {
   name: 'SideMenu',
+  inject: ['reload'],
+  data () {
+    return {
+      activeIndex: '0'
+    }
+  },
   methods: {
-    gotoRecommand: function () {
-      this.$router.push('/index/blog/listRecommend')
+    gotoList: function (active, Type) {
+      this.changeActive(active)
+      this.$router.push('/index/blogList/' + Type)
+      this.reload()
     },
-    gotoFowllow: function () {
-      this.$router.push('/index/blog/listFollow')
+    changeActive: function (index) {
+      this.activeIndex = index
     }
   }
 }

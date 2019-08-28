@@ -13,8 +13,6 @@
       <hr style="width: 1000px">
       <p style="float: left;color: black">昵称: &nbsp;&nbsp;{{nickname}}</p>
       <div class="clear"></div>
-      <p style="float: left;color: black">实名: &nbsp;&nbsp;</p>
-      <div class="clear"></div>
       <p style="float: left;color: black">性别: &nbsp;&nbsp;</p>
       <div class="clear"></div>
       <p style="float: left;color: black">生日: &nbsp;&nbsp;</p>
@@ -38,11 +36,6 @@
           <div>
             <p style="float: left;margin-top: 3px">昵称: &nbsp;</p>
             <el-input v-model="t_nickname" size="mini" style="float: left;margin-left: 10px;width: 200px"></el-input>
-          </div>
-          <div class="clear"></div>
-          <div>
-            <p style="float: left;margin-top: 3px">实名: &nbsp;</p>
-            <el-input v-model="t_truename" size="mini" style="float: left;margin-left: 10px;width: 200px"></el-input>
           </div>
           <div class="clear"></div>
           <div>
@@ -136,7 +129,6 @@ export default {
   },
   mounted () {
     this.t_nickname = this.nickname
-    this.t_truename = this.truename
     this.t_gender = this.gender
     this.t_birth = this.birth
     this.t_address = this.address
@@ -146,17 +138,24 @@ export default {
   },
   methods: {
     uploadData () {
-      this.$axios
-        .post('http://localhost:8443/api/uploadData', {
-          nickname: this.nickname,
-          truename: this.truename,
-          gender: this.gender,
-          birth: this.birth,
-          address: this.address,
-          work: this.work,
-          position: this.position,
-          intro: this.intro
-        })
+      var self = this
+      console.log(self.nickname)
+      console.log(self.userId)
+      console.log(self.gender)
+      console.log(self.birth)
+      console.log(self.work)
+      console.log(self.position)
+      console.log(self.intro)
+      self.$axios.post('http://localhost:8443/api/editUserHome', {
+        nickname: self.nickname,
+        username: self.userId,
+        gender: self.gender,
+        birth: self.birth,
+        address: self.address,
+        work: self.work,
+        position: self.position,
+        intro: self.intro
+      })
         .then(successResponse => {
           if (successResponse.data.code === 200) {
             this.$message({

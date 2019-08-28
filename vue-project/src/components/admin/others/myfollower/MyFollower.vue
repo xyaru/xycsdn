@@ -56,51 +56,51 @@
 </template>
 
 <script>
-  export default {
-    name: 'UserSearch',
-    data () {
-      return {
-        currentPage: 1,
-        pagesize: 10,
-        blogList: [],
-        input: this.$route.params.input
-      }
+export default {
+  name: 'OthersFollower',
+  data () {
+    return {
+      currentPage: 1,
+      pagesize: 10,
+      blogList: [],
+      input: this.$route.params.input
+    }
+  },
+  created: function () {
+    this.handleBlogList()
+  },
+  methods: {
+    handleSizeChange: function (size) {
+      this.pagesize = size
+      console.log(this.pagesize)
     },
-    created: function () {
-      this.handleBlogList()
+    handleCurrentChange: function (currentPage) {
+      this.currentPage = currentPage
+      console.log(this.currentPage)
     },
-    methods: {
-      handleSizeChange: function (size) {
-        this.pagesize = size
-        console.log(this.pagesize)
-      },
-      handleCurrentChange: function (currentPage) {
-        this.currentPage = currentPage
-        console.log(this.currentPage)
-      },
-      handleBlogList () {
-        var self = this
-        self.$axios.post('http://localhost:8443/api/findByNameLike', {
-          username: this.input
+    handleBlogList () {
+      var self = this
+      self.$axios.post('http://localhost:8443/api/findByNameLike', {
+        username: this.input
+      })
+        .then(function (response) {
+          if (response.data.code === 200) {
+            self.blogList = response.data.data
+          } else {
+            alert('no follower')
+          }
         })
-          .then(function (response) {
-            if (response.data.code === 200) {
-              self.blogList = response.data.data
-            } else {
-              alert('user not found')
-            }
-          })
-          .catch(function (error) {
-            alert(error)
-          })
-      },
-      handleClick (row) {
-        this.$router.push('/admin/' + row.username)
-      }
-
+        .catch(function (error) {
+          alert(error)
+        })
+    },
+    handleClick (row) {
+      this.$router.push('/admin/' + row.username)
     }
 
   }
+
+}
 </script>
 
 <style scoped>

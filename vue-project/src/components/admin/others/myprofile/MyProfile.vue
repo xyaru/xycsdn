@@ -34,7 +34,7 @@
 <script>
 import Avatar from './Avatar'
 export default {
-  name: 'MyProfile',
+  name: 'OthersProfile',
   components: {Avatar},
   data () {
     return {

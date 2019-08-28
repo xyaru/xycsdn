@@ -8,7 +8,7 @@
 
 <script>
 export default {
-  name: 'Avatar',
+  name: 'OthersAvatar',
   data () {
     return {
       imgSrc: 'http://www.luckly-mjw.cn/baseSource/picture-avatar-03.png',

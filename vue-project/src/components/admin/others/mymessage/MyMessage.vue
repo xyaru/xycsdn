@@ -17,7 +17,7 @@
 
 <script>
 export default {
-  name: 'MyMessage',
+  name: 'OthersMessage',
   data () {
     return {
       messages: '0'

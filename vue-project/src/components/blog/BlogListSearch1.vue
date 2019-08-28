@@ -1,5 +1,5 @@
 <template>
-  <div id="blog-list">
+  <div id="blog-list" v-if="show">
     <h1>搜索博客</h1>
 
     <el-row :gutter="0" type="flex" justify="center">
@@ -62,10 +62,11 @@ export default {
     return {
       currentPage: 1,
       pagesize: 10,
-      blogList: []
+      blogList: [],
+      show: false
     }
   },
-  created: function () {
+  mounted () {
     this.handleBlogList()
   },
   methods: {
@@ -79,14 +80,19 @@ export default {
     },
     handleBlogList () {
       var self = this
-      self.$axios.get('http://localhost:8443/api/findByNameLike')
+      self.$axios.post('http://localhost:8443/api/searchTitle', {
+        title: this.input
+      })
         .then(function (response) {
           if (response.data.code === 200) {
             self.show = true
             self.blogList = response.data.data
           } else if (response.data.code === 400) {
             self.show = false
-            alert(response.data.message)
+            self.$message({
+              type: 'warning',
+              message: '无结果'
+            })
           } else {
             alert('code = ' + response.data.code)
           }
