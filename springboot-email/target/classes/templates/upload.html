@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+
+
+<!-- Mirrored from www.zi-han.net/theme/hplus/form_editors.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 20 Jan 2016 14:19:35 GMT -->
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title>H+ 后台主题UI框架 - 富文本编辑器</title>
+    <meta name="keywords" content="H+后台主题,后台bootstrap框架,会员中心主题,后台HTML,响应式后台">
+    <meta name="description" content="H+是一个完全响应式，基于Bootstrap3最新版本开发的扁平化主题，她采用了主流的左右两栏式布局，使用了Html5+CSS3等现代技术">
+
+    <link rel="shortcut icon" href="favicon.ico"> <link href="../hplus/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="../hplus/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="../hplus/css/animate.min.css" rel="stylesheet">
+    <link href="../hplus/css/plugins/summernote/summernote.css" rel="stylesheet">
+    <link href="../hplus/css/plugins/summernote/summernote-bs3.css" rel="stylesheet">
+    <link href="../hplus/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content">
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+
+                <div class="ibox-title">
+                    内容标题:&nbsp;&nbsp;<input id="title_text" type="text">&nbsp;*
+                </div>
+
+                <div class="ibox-content no-padding">
+                    <button id="save" class="btn btn-primary  btn-xs" οnclick="save()" type="button">保存</button>
+                    <button id="btn" class="btn btn-primary  btn-xs"  type="button" οnclick="preview()">预览</button>
+                    <div class="summernote">
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--预览-->
+    <div id="preview" style="display: none">
+        <button class="btnfan" οnclick="hide()">返回</button>
+        <div class="preview_box">
+            <div class="preview_box_last" id="preview_box_last">
+
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+
+
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="../hplus/js/jquery.min.js?v=2.1.4"></script>
+<script src="../hplus/js/bootstrap.min.js?v=3.3.6"></script>
+<script src="../hplus/js/content.min.js?v=1.0.0"></script>
+<script src="../hplus/js/plugins/summernote/summernote.min.js"></script>
+<script src="../hplus/js/plugins/summernote/summernote-zh-CN.js"></script>
+
+
+<script>
+    window.onload=function(){
+
+        getId()
+    }
+    var id=localStorage.getItem("id");
+    console.log(id);
+    var arr=[];
+    $(document).ready(function(){
+        $(".summernote").summernote({lang:"zh-CN",
+            callbacks: {
+
+                onImageUpload: function(files) {
+                    // 上传图片到服务器并且插入图片到编辑框
+                    //alert("aaa");
+
+                    sendFile(files[0])
+                },
+                onPaste: function(ne) {
+
+                    var bufferText = ((ne.originalEvent || ne).clipboardData || window.clipboardData).getData('Text/plain');
+                    //    ne.preventDefault();
+                    ne.preventDefault ? ne.preventDefault() : (ne.returnValue = false);
+                    // Firefox fix
+                    setTimeout(function () {
+                        document.execCommand("insertText", false, bufferText);
+                    }, 10);
+                }
+            }
+        })
+    })
+    function getId(){
+
+
+        if(id==''){
+
+        }else{
+            $.ajax({
+                type:"get",
+                url:'/content/service/byId?id='+id+'',
+                cache:false,
+                async:false, //是否异步
+                success:function(data) {
+                    console.log(typeof data);
+                    document.getElementById("title_text").value=data.title;
+                    console.log(data.title);
+                    var markupStr = ''+data.content+'';
+                    $('.summernote').summernote('code', markupStr);
+
+                    localStorage.removeItem('id');
+
+                },
+
+            })
+        }
+    }
+    ; var edit=function(){$("#eg").addClass("no-padding");
+        $(".click2edit").summernote({lang:"zh-CN",focus:true})};
+    function sendFile(file){
+
+        var filename=false;
+
+        filename=file['name'];
+        filename=false;
+        if(!filename){
+            $(".note-alarm").remove();
+        }
+        data=new FormData();
+
+        data.append("file",file);
+
+        data.append("key",filename);
+        console.log(file);
+
+        $.ajax({
+
+            data:data,
+            type:"post",
+            url:'/content/upload',
+            cache:false,
+            dataType:'json',
+            contentType:false,
+            processData:false,
+            success:function (data) {
+                // console.log(typeof data );
+                data=JSON.parse(data)
+                //console.log(typeof data );
+                console.log(data.path);
+                $('.summernote').summernote('editor.insertImage', data.path)
+                arr.push(data.path);
+            },
+            error:function () {
+                alert("上传失败");
+            }
+        })
+    }
+    function save() {
+
+        //var aHTML=$(".summernote").code();
+        //console.log(aHTML)
+        var aa=$('.summernote').summernote('code')
+        console.log(typeof aa)
+        var title=document.getElementById("title_text").value;
+
+
+        if(id==""||id==null||id=="null"){
+            if(title==""){
+                alert("请输入标题");
+
+            }else{
+                var str=''
+                var _str=''
+                str=''+aa+''
+                //summernote会把空格以后或者带%的所有内容自动去掉，所以这里替换所有空格和转%
+
+                var st= encodeURIComponent(str);
+                $.ajax({
+                    type:'post', //方式
+                    url:'/content/service',
+                    data:"content="+st+"&title="+title,
+                    async:false,   //是否异步
+                    success:function(data) {
+                        alert("成功");
+                        window.location.href="/content"
+                    },
+                    error:function () {
+                        alert("上传失败");
+                    }
+                })
+            }
+        }else{
+            if(title==""){
+                alert("请输入标题");
+
+            }else{
+
+                var str=''
+                var _str=''
+                str=''+aa+''
+                //summernote会把空格以后或者带%的所有内容自动去掉，所以这里替换所有空格和转%
+
+                var st= encodeURIComponent(str);
+                $.ajax({
+                    type:'put', //方式
+                    url:'/content/service',
+                    data:"content="+st+"&title="+title+"&id="+id,
+
+                    async:false,   //是否异步
+                    success:function(data) {
+                        alert("成功");
+                        console.log(data);
+                        window.location.href="/content"
+                    },
+                    error:function () {
+                        //    console.log(id2);
+                        alert("上传失败2");
+                    }
+                })
+            }
+        }
+
+
+    }
+
+    function preview(){
+        var aa=$('.summernote').summernote('code');
+        document.getElementById("preview_box_last").innerHTML=aa;
+
+        document.getElementById('preview').style.display="block";
+
+    };
+    function hide() {
+        document.getElementById('preview').style.display="none";
+        document.getElementById("preview_box_last").innerHTML="";
+    }
+
+
+</script>
+
+<script type="text/javascript" src="http://tajs.qq.com/stats?sId=9051096" charset="UTF-8"></script>
+</body>
+
+
+</html>
