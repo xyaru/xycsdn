@@ -19,7 +19,7 @@ import Router from 'vue-router'
 
 import './assets/css/index.css'
 var axios = require('axios')
-axios.defaults.baseURI = 'http://localhost:8443/api'
+// axios.defaults.baseURI = '/api'
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push (location) {
@@ -36,7 +36,7 @@ router.beforeEach((to, from, next) => {
       next()
     } else {
       next({
-        path: 'login',
+        path: '/login',
         query: {redirect: to.fullPath}
       })
     }

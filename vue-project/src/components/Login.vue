@@ -38,7 +38,7 @@ export default {
     login () {
       var _this = this
       this.$axios
-        .post('http://localhost:8443/api/login', {
+        .post('/api/login', {
           username: this.loginForm.username,
           password: this.loginForm.password
         })

@@ -2,13 +2,14 @@
   <section class="p-user-data">
     <img :src="imgSrc">
     <div class="btn" v-if="!isFollowed" @click="follow">关注</div>
-    <div class="btn1" v-if="isFollowed" @click="unfollow">取消关注</div>
+    <div class="btn" v-if="isFollowed" @click="unfollow">取消关注</div>
   </section>
 </template>
 
 <script>
 export default {
   name: 'OthersAvatar',
+  inject: ['reload'],
   data () {
     return {
       imgSrc: 'http://www.luckly-mjw.cn/baseSource/picture-avatar-03.png',
@@ -20,19 +21,43 @@ export default {
   },
   mounted () {
     this.checkFollowed()
+    this.showAvatar()
   },
   methods: {
+    showAvatar () {
+      var self = this
+      self.$axios.post('/api/myHead', {
+        username: self.userId
+      })
+        .then(successResponse => {
+          if (successResponse.data.code === 200) {
+            self.imgSrc = successResponse.data.data
+          } else {
+            this.$message({
+              type: 'warning',
+              message: '接收图片失败'
+            })
+          }
+        })
+        .catch(failResponse => {
+          this.$message({
+            type: 'error',
+            message: '服务器未响应'
+          })
+        })
+    },
     follow: function () {
       var self = this
-      self.$axios.post('http://localhost:8443/api/followOne', {
-        usernameOne: this.myUserId,
-        usernameTwo: this.userId
+      self.$axios.post('/api/followOne', {
+        usernameOne: self.myUserId,
+        usernameTwo: self.userId
       })
         .then(function (response) {
           if (response.data.code === 200) {
             self.$message({
               type: 'success',
-              message: this.myUserId + ' has just followed ' + this.userId})
+              message: self.myUserId + ' has just followed ' + self.userId})
+            self.reload()
           } else {
             alert('code = ' + response.data.code)
           }
@@ -44,15 +69,16 @@ export default {
     },
     unfollow: function () {
       var self = this
-      self.$axios.post('http://localhost:8443/api/dfollowOne', {
-        usernameOne: this.myUserId,
-        usernameTwo: this.userId
+      self.$axios.post('/api/dfollowOne', {
+        usernameOne: self.myUserId,
+        usernameTwo: self.userId
       })
         .then(function (response) {
           if (response.data.code === 200) {
             self.$message({
               type: 'success',
-              message: this.myUserId + ' has just stop following ' + this.userId})
+              message: self.myUserId + ' has just stop following ' + self.userId})
+            self.reload()
           } else {
             alert('code = ' + response.data.code)
           }
@@ -64,7 +90,7 @@ export default {
     },
     checkFollowed: function () {
       var self = this
-      self.$axios.post('http://localhost:8443/api/DoIFollowOne', {
+      self.$axios.post('/api/DoIFollowOne', {
         usernameOne: self.myUserId,
         usernameTwo: self.userId
       })
@@ -89,7 +115,6 @@ export default {
     background-color: white;
     img {
       display: block;
-      margin-left: 200px;
       width: 100px;
       height: 100px;
       background-image: url(../../../../assets/empty.png);
@@ -98,23 +123,7 @@ export default {
     .btn {
       display: block;
       float: left;
-      margin-left: 200px;
-      margin-top: 20px;
-      width: 100px;
-      height: 20px;
-      line-height: 10px;
-      font-size: 12px;
-      color: white;
-      border-radius: 4px;
-      text-align: center;
-      box-sizing: border-box;
-      background-color: #3D8AC7;
-    }
-    .btn1 {
-      display: block;
-      float: left;
-      margin-left: 200px;
-      margin-top: 20px;
+      margin-top: 40px;
       width: 100px;
       height: 20px;
       line-height: 10px;

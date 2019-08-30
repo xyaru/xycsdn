@@ -1,11 +1,12 @@
 <template>
   <div id="blog-list">
-    <h1>推荐博客</h1>
-
+    <h3 style="float: left">推荐博客</h3>
+    <div style="clear: both;"></div>
     <el-row :gutter="30">
       <!-- 单个的卡片列 -->
-      <div class="container">
-        <el-table style="width: 100%;"
+      <div class="container" style="float: left;width: 100%">
+        <el-table style="width: 750px"
+                  :stripe="true"
                   :data="blogList.slice((currentPage-1)*pagesize,currentPage*pagesize)"
         >
         <el-table-column type="index" width="50">
@@ -15,14 +16,14 @@
             <el-button @click="handleClickUser(scope.row)" type="text">{{scope.row.username}}</el-button>
           </template>
         </el-table-column>
-        <el-table-column label="title" prop="title" width="180">
+        <el-table-column label="title" prop="title" width="240">
         </el-table-column>
-        <el-table-column label="type" width="180">
+        <el-table-column label="type" width="120">
           <template slot-scope="scope">
             <el-button @click="handleClickType(scope.row)" type="text">{{scope.row.type}}</el-button>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="180">
+        <el-table-column label="操作" width="100">
           <template slot-scope="scope">
             <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
           </template>
@@ -33,31 +34,11 @@
           @current-change="handleCurrentChange"
           :current-page="currentPage"
           :page-sizes="[5, 10, 20, 40]"
-        :page-size="pagesize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="blogList.length">    //这是显示总共有多少数据，
+          :page-size="pagesize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="blogList.length"
+          style="float: left;">    //这是显示总共有多少数据，
         </el-pagination>
-<!--      <el-col :span="6" v-for="(item, index) in blogList"-->
-<!--              :index="index"-->
-<!--              :key="index"-->
-<!--              class="">&lt;!&ndash; 0 == flag || item.courseType == flag ? '' : 'hide' &ndash;&gt;-->
-<!--        &lt;!&ndash; card div &ndash;&gt;-->
-<!--        <router-link :to="'/index/blog/' + item._id">-->
-<!--          <div class="blog" >-->
-<!--            &lt;!&ndash; info div &ndash;&gt;-->
-<!--            <div class="blog-info">-->
-<!--              &lt;!&ndash; class name div &ndash;&gt;-->
-<!--              <div class="user">-->
-<!--                {{item.username}}-->
-<!--              </div>-->
-<!--              &lt;!&ndash; teacher name div &ndash;&gt;-->
-<!--              <div class="title">-->
-<!--                {{item.title}}-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </router-link>-->
-<!--      </el-col>-->
       </div>
     </el-row>
   </div>
@@ -87,7 +68,7 @@ export default {
     },
     handleBlogList () {
       var self = this
-      self.$axios.get('http://localhost:8443/api/findAllBlog')
+      self.$axios.get('/api/findAllBlog')
         .then(function (response) {
           self.blogList = response.data.data
         })
@@ -102,7 +83,7 @@ export default {
       this.$router.push('/index/blogList/' + row.type)
     },
     handleClickUser (row) {
-      this.$router.push('/admin/' + row.username)
+      this.$router.push('/user/' + row.username + '/othersProfile')
     }
 
   }

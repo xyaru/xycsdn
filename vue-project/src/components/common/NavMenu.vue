@@ -3,20 +3,20 @@
     router
     mode="horizontal"
     background-color="white"
-    default-active="$route.path"
+    default-active='activeIndex'
     text-color="#222"
     active-text-color="red"
     style="width: 100%">
-    <el-menu-item v-on:click="changeNo(1)" index="/index/blogList/listRecommend">
+    <el-menu-item v-on:click="changeNo('/index/blogList/listRecommend')" index="/index/blogList/listRecommend">
       <router-link :to="{ path: '/index'}" style="color: dodgerblue;"><p>首页</p></router-link>
     </el-menu-item>
-    <el-menu-item v-on:click="changeNo(2)" index="/search">
+    <el-menu-item v-on:click="changeNo('/search')" index="/search">
       <router-link :to="{ path: '/search'}" style="color: dodgerblue;"><p>搜索</p></router-link>
     </el-menu-item>
-    <el-menu-item v-on:click="changeNo(3)" index="/write">
+    <el-menu-item v-on:click="changeNo('/write')" index="/write">
       <p @click="showWarn('/write')" style="color: dodgerblue;">写博客</p>
     </el-menu-item>
-    <el-menu-item  v-on:click="changeNo(4)" index="/admin/myProfile">
+    <el-menu-item  v-on:click="changeNo('/admin/myProfile')" index="/admin/myProfile">
       <p @click="showWarn('/admin')" style="color: dodgerblue;">个人中心</p>
     </el-menu-item>
     <!--    -->
@@ -26,7 +26,7 @@
     <router-link v-if="!username" :to="{ path: '/login' }" style="color: dodgerblue;float: right;padding: 20px;">登录</router-link>
     <router-link v-if="!username" :to="{ path: '/regist' }" style="color: dodgerblue;float: right;padding: 20px;">注册</router-link>
     <el-button v-if="username" type="text" @click="open" style="color: dodgerblue;float: right;padding: 22px">注销</el-button>
-    <router-link v-if="username" :to="{ path: '/admin' }"  @click="showWarn('/admin')" style="color: dodgerblue;float: right;padding: 20px">{{username}}</router-link>
+    <router-link v-if="username" :to="{ path: '/admin/myProfile' }"  @click="showWarn('/admin')" style="color: dodgerblue;float: right;padding: 20px">{{username}}</router-link>
     <i class="el-icon-menu" style="float:right;font-size: 45px;color: #222;padding-top: 8px;color: dodgerblue"></i>
 <!--    <span style="position: absolute;padding-top: 20px;right: 43%;font-size: 20px;font-weight: bold;color: cornflowerblue">技术分享博客网站</span>-->
   </el-menu>
@@ -39,7 +39,7 @@ export default {
   data () {
     return {
       username: this.$store.state.user.username,
-      activeIndex: '1'
+      activeIndex: window.localStorage.getItem('activeIndex')
     }
   },
   methods: {
@@ -75,6 +75,7 @@ export default {
       // console.log('before' + this.activeIndex)
       this.activeIndex = index
       // console.log('after' + this.activeIndex)
+      window.localStorage.setItem('activeIndex', index)
     }
   }
 }

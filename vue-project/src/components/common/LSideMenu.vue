@@ -1,36 +1,35 @@
 <template>
   <el-menu
     class="categories"
-    default-active="activeIndex"
     background-color="white"
-    active-text-color="red">
+    default-active='activeIndex'>
     <el-menu-item index="0" style="color: gray" v-on:click="gotoList('0', 'listRecommend')">
       <i class="el-icon-menu"></i>
-      <span slot="title">推荐</span>
+      <span slot="title" :class="{'textcolor' : activeIndex === '0'}">推荐</span>
     </el-menu-item>
     <el-menu-item index="1" style="color: gray" v-on:click="gotoList('1', 'listFollow')">
       <i class="el-icon-menu"></i>
-      <span slot="title">收藏</span>
+      <span slot="title" :class="{'textcolor' : activeIndex === '1'}">收藏</span>
     </el-menu-item>
     <el-menu-item index="2" style="color: gray" v-on:click="gotoList('2', 'Vue')">
       <i class="el-icon-menu"></i>
-      <span slot="title">Vue</span>
+      <span slot="title" :class="{'textcolor' : activeIndex === '2'}">Vue</span>
     </el-menu-item>
     <el-menu-item index="3" style="color: gray" v-on:click="gotoList('3', 'Springboot')">
       <i class="el-icon-menu"></i>
-      <span slot="title">Springboot</span>
+      <span slot="title" :class="{'textcolor' : activeIndex === '3'}">Springboot</span>
     </el-menu-item>
-    <el-menu-item index="4" style="color: gray" v-on:click="gotoList('3', 'MongoDB')">
+    <el-menu-item index="4" style="color: gray" v-on:click="gotoList('4', 'MongoDB')">
       <i class="el-icon-menu"></i>
-      <span slot="title">MongoDB</span>
+      <span slot="title" :class="{'textcolor' : activeIndex === '4'}">MongoDB</span>
     </el-menu-item>
-    <el-menu-item index="5" style="color: gray" v-on:click="gotoList('3', 'HTML')">
+    <el-menu-item index="5" style="color: gray" v-on:click="gotoList('5', 'HTML')">
       <i class="el-icon-menu"></i>
-      <span slot="title">HTML</span>
+      <span slot="title" :class="{'textcolor' : activeIndex === '5'}">HTML</span>
     </el-menu-item>
-    <el-menu-item index="6" style="color: gray" v-on:click="gotoList('3', 'Others')">
+    <el-menu-item index="6" style="color: gray" v-on:click="gotoList('6', 'Others')">
       <i class="el-icon-menu"></i>
-      <span slot="title">杂项</span>
+      <span slot="title" :class="{'textcolor' : activeIndex === '6'}">杂项</span>
     </el-menu-item>
   </el-menu>
 </template>
@@ -41,7 +40,7 @@ export default {
   inject: ['reload'],
   data () {
     return {
-      activeIndex: '0'
+      activeIndex: window.localStorage.getItem('SMaP')
     }
   },
   methods: {
@@ -52,6 +51,8 @@ export default {
     },
     changeActive: function (index) {
       this.activeIndex = index
+      window.localStorage.setItem('SMaP', index)
+      console.log(index)
     }
   }
 }
@@ -59,7 +60,9 @@ export default {
 
 <style scoped>
   .categories {
-    position: fixed;
     width: 150px;
+  }
+  .textcolor {
+    color: dodgerblue;
   }
 </style>

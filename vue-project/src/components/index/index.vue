@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-container>
-      <el-aside width="150px">
+      <el-aside width="180px">
         <LSideMenu></LSideMenu>
       </el-aside>
       <el-main>

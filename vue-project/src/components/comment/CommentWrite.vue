@@ -1,17 +1,21 @@
 <template>
   <div>
-    <el-input
-      type="textarea"
-      :autosize="{ minRows: 4}"
-      placeholder="请输入评论"
-      v-model="textarea">
-    </el-input>
-    <el-button type="primary" @click="handleClick">发表评论</el-button>
+    <el-col :span="12">
+      <el-input
+        type="textarea"
+        :autosize="{ minRows: 4}"
+        placeholder="请输入评论"
+        v-model="textarea"
+      >
+      </el-input>
+      <el-button type="primary" @click="handleClick">发表评论</el-button>
+    </el-col>
   </div>
 </template>
 <script>
 export default {
   name: 'CommentWrite',
+  inject: ['reload'],
   data () {
     return {
       textarea: '',
@@ -27,7 +31,7 @@ export default {
           type: 'warning',
           message: '评论不得为空'})
       } else {
-        self.$axios.post('http://localhost:8443/api/postReview', {
+        self.$axios.post('/api/postReview', {
           content: self.textarea,
           username: self.username,
           bid: self.blog
@@ -37,6 +41,7 @@ export default {
               type: 'success',
               message: '成功发送评论'})
             self.textarea = ''
+            self.reload()
           })
           .catch(function (error) {
             alert(error)

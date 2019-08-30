@@ -1,6 +1,5 @@
 <template>
   <div>
-    <br>
     <h3 style="float: left">个人资料</h3>
     <hr style="margin-top: 80px">
 <!--    <p style="color: gray">ID: {{userId}}</p>-->
@@ -10,7 +9,7 @@
       <div class="clear"></div>
       <p style="float: left;color: black;">关注: &nbsp;{{following}} &nbsp;&nbsp; 粉丝: &nbsp;{{followers}}</p>
       <div class="clear"></div>
-      <hr style="width: 1000px">
+      <hr style="width: 800px">
       <p style="float: left;color: black">昵称: &nbsp;&nbsp;{{nickname}}</p>
       <div class="clear"></div>
       <p style="float: left;color: black">性别: &nbsp;&nbsp; {{gender}}</p>
@@ -57,7 +56,8 @@
               style="float: left;margin-left: 10px;width: 200px"
               v-model="t_birth"
               type="date"
-              placeholder="选择日期">
+              placeholder="选择日期"
+            >
             </el-date-picker>
           </div>
           <div class="clear"></div>
@@ -128,14 +128,14 @@ export default {
   },
   mounted () {
     var self = this
-    self.$axios.post('http://localhost:8443/api/visitHome', {
+    self.$axios.post('/api/visitHome', {
       username: self.userId
     })
       .then(successResponse => {
         if (successResponse.data.code === 200) {
           self.nickname = successResponse.data.data.ushm.nickname
           self.gender = successResponse.data.data.ushm.gender
-          self.birth = successResponse.data.data.ushm.birth
+          self.birth = successResponse.data.data.ushm.birth.slice(0, 10)
           self.address = successResponse.data.data.ushm.address
           self.work = successResponse.data.data.ushm.work
           self.position = successResponse.data.data.ushm.position
@@ -159,7 +159,7 @@ export default {
   methods: {
     uploadData () {
       var self = this
-      self.$axios.post('http://localhost:8443/api/editUserHome', {
+      self.$axios.post('/api/editUserHome', {
         nickname: self.t_nickname,
         username: self.userId,
         gender: self.t_gender,

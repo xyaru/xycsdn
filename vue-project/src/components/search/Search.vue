@@ -1,13 +1,11 @@
 <template>
   <div>
-    <el-input v-model="input" placeholder="请输入内容" style="margin-left: 150px;width: 70%"></el-input>
+    <el-input v-model="input" placeholder="请输入内容" style="margin-left: -50px;width: 50%"></el-input>
     <div style="clear: both"></div>
     <el-button icon="el-icon-search" v-on:click="processClick">全文搜索</el-button>
     <el-button icon="el-icon-search" v-on:click="processClick1">关键字/标签搜索</el-button>
     <el-button icon="el-icon-search" v-on:click="processClickUser">用户搜索</el-button>
-    <el-main>
-      <router-view></router-view>
-    </el-main>
+    <router-view></router-view>
   </div>
 </template>
 

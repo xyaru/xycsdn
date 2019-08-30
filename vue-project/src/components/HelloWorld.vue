@@ -11,7 +11,9 @@
 import NavMenu from './common/NavMenu'
 export default {
   name: 'HelloWorld',
-  components: {NavMenu}
+  components: {NavMenu},
+  mounted () {
+  }
 }
 </script>
 

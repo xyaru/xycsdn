@@ -3,6 +3,11 @@
   <el-form class="regist-container" label-position="left"
            label-width="0px">
     <h3 class="regist_title">注册博客</h3>
+<!--    <el-form-item>-->
+<!--      <el-input placeholder="请输入内容" v-model="registForm.email">-->
+<!--        <el-button slot="append" icon="el-icon-message" v-on:click="email"></el-button>-->
+<!--      </el-input>-->
+<!--    </el-form-item>-->
     <el-form-item>
       <el-input type="text" v-model="registForm.username"
                 auto-complete="off" placeholder="账号"></el-input>
@@ -30,20 +35,29 @@ export default {
       registForm: {
         username: '',
         password: '',
-        repasswd: ''
+        repasswd: '',
+        email: ''
       },
       responseResult: []
+      // verification: ''
     }
   },
   methods: {
     login () {
       var _this = this
+      var self = this
+      // if (self.verification === '') {
+      //   self.$message({
+      //     type: 'warning',
+      //     message: '请输入验证码'})
+      // } else {
       console.log(this.$store.state)
       this.$axios
-        .post('http://localhost:8443/api/register', {
-          username: this.registForm.username,
-          password: this.registForm.password,
-          surepswd: this.registForm.repasswd
+        .post('/api/register', {
+          username: _this.registForm.username,
+          password: _this.registForm.password,
+          surepswd: _this.registForm.repasswd
+          // verification: _this.verification
         })
         .then(successResponse => {
           if (successResponse.data.code === 200) {
@@ -53,15 +67,53 @@ export default {
             _this.$store.commit('login', _this.registForm)
             var path = this.$route.query.redirect
             this.$router.replace({path: path === '/' || path === undefined ? '/index' : path})
-          } else {
+            // eslint-disable-next-line brace-style
+          } // else if (successResponse.data.code === 300) {
+          //   self.$message({
+          //     type: 'warning',
+          //     message: '验证码错误或不存在，请注意查收邮件中的验证码'})
+          // }
+          else {
             self.$message({
               type: 'warning',
               message: '账号密码错误'})
           }
         })
         .catch(failResponse => {
+          self.$message({
+            type: 'warning',
+            message: '服务器异常'})
         })
-    }
+      // }
+    }// ,
+    // email () {
+    //   var self = this
+    //   if (self.registForm.email === '') {
+    //     self.$message({
+    //       type: 'warning',
+    //       message: '请输入邮箱'})
+    //   } else {
+    //     self.$axios.post('/api/ClBlogs', {
+    //       email: self.registForm.email
+    //     })
+    //       .then(function (response) {
+    //         if (response.data.code === 200) {
+    //           self.$message({
+    //             type: 'success',
+    //             message: '邮件已发送至 : ' + self.registForm.email + '，请注意查收'})
+    //         } else if (response.data.code === 400) {
+    //           self.$message({
+    //             type: 'warning',
+    //             message: '邮箱格式错误，或发送邮件失败，请检查邮箱后重新发送'})
+    //         } else {
+    //           alert('code = ' + response.data.code)
+    //         }
+    //       })
+    //       .catch(function (error) {
+    //         alert(error)
+    //       })
+    //   }
+    // }
   }
 }
 </script>

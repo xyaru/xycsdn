@@ -34,7 +34,7 @@ export default new Router({
       path: '/',
       name: 'HelloWorld',
       component: HelloWorld,
-      redirect: '/index',
+      redirect: '/index/blogList/listRecommend',
       children: [
         {
           path: '/index',
@@ -49,7 +49,10 @@ export default new Router({
             {
               path: 'blogList/listFollow',
               name: 'BlogListFollow',
-              component: BlogListFollow
+              component: BlogListFollow,
+              meta: {
+                requireAuth: true
+              }
             },
             {
               path: 'blogList/:blogType',
@@ -97,6 +100,7 @@ export default new Router({
           path: '/admin',
           name: 'Admin',
           component: Admin,
+          redirect: '/admin/myProfile',
           meta: {
             requireAuth: true
           },
@@ -104,27 +108,42 @@ export default new Router({
             {
               path: 'myBlog',
               name: 'MyBlog',
-              component: MyBlog
+              component: MyBlog,
+              meta: {
+                requireAuth: true
+              }
             },
             {
               path: 'myFollower',
               name: 'MyFollower',
-              component: MyFollower
+              component: MyFollower,
+              meta: {
+                requireAuth: true
+              }
             },
             {
               path: 'myFollowing',
               name: 'MyFollowing',
-              component: MyFollowing
+              component: MyFollowing,
+              meta: {
+                requireAuth: true
+              }
             },
             {
               path: 'myProfile',
               name: 'MyProfile',
-              component: MyProfile
+              component: MyProfile,
+              meta: {
+                requireAuth: true
+              }
             },
             {
               path: 'myFavor',
               name: 'MyFavor',
-              component: BlogListFollow
+              component: BlogListFollow,
+              meta: {
+                requireAuth: true
+              }
             }
           ]
         }

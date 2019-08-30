@@ -1,57 +1,55 @@
 <template>
-  <div id="blog-list" v-if="show">
-    <h1>搜索用户</h1>
-
-    <el-row :gutter="0" type="flex" justify="center">
-      <!-- 单个的卡片列 -->
-      <div class="container">
-        <el-table style="width: 100%;"
-                  :data="blogList.slice((currentPage-1)*pagesize,currentPage*pagesize)">
-        <el-table-column type="index" width="50">
-        </el-table-column>
-        <el-table-column label="user" prop="username" width="180">
-        </el-table-column>
-        <el-table-column label="password" prop="password" width="180">
-        </el-table-column>
-        <el-table-column label="操作" width="180">
-          <template slot-scope="scope">
-            <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
-          </template>
-        </el-table-column>
-        </el-table>
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="currentPage"
-          :page-sizes="[5, 10, 20, 40]"
-        :page-size="pagesize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="blogList.length">    //这是显示总共有多少数据，
-        </el-pagination>
-<!--      <el-col :span="6" v-for="(item, index) in blogList"-->
-<!--              :index="index"-->
-<!--              :key="index"-->
-<!--              class="">&lt;!&ndash; 0 == flag || item.courseType == flag ? '' : 'hide' &ndash;&gt;-->
-<!--        &lt;!&ndash; card div &ndash;&gt;-->
-<!--        <router-link :to="'/index/user/' + item.username">-->
-<!--          <div class="user" >-->
-<!--            &lt;!&ndash; info div &ndash;&gt;-->
-<!--            <div class="user-info">-->
-<!--              &lt;!&ndash; class name div &ndash;&gt;-->
-<!--              <div class="username">-->
-<!--                {{item.username}}-->
-<!--              </div>-->
-<!--              &lt;!&ndash; teacher name div &ndash;&gt;-->
-<!--              <div class="password">-->
-<!--                {{item.password}}-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </router-link>-->
-<!--      </el-col>-->
-      </div>
-    </el-row>
+  <div>
+    <div id="blog-list" v-if="show">
+      <h3>搜索用户</h3>
+      <el-row>
+        <div class="container" v-if="show">
+          <el-col :span="16" :offset="4">
+            <el-table style="width: 100%;"
+                      :data="blogList.slice((currentPage-1)*pagesize,currentPage*pagesize)">
+              <el-table-column type="index" width="50">
+              </el-table-column>
+              <el-table-column label="user" prop="username" width="180">
+                <template slot-scope="scope">
+                  <el-button @click="handleClickUser(scope.row)" type="text">{{scope.row.username}}</el-button>
+                </template>
+              </el-table-column>
+              <el-table-column label="followNumber" prop="followNumber" width="180">
+              </el-table-column>
+              <el-table-column label="fansNumber" prop="fansNumber" width="180">
+              </el-table-column>
+              <el-table-column label="操作" width="100">
+                <template slot-scope="scope">
+                  <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+          </el-col>
+          <el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
+          <div style="clear: both"></div>
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-sizes="[5, 10, 20, 40]"
+            :page-size="pagesize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="blogList.length">
+          </el-pagination>
+        </div>
+      </el-row>
+    </div>
+    <div v-if="!show">
+      <br>
+      <br>
+      <br>
+      <img src="../../assets/blank.png">
+      <br>
+      <br>
+      <p style="color: gray">空空如也</p>
+    </div>
   </div>
+
 </template>
 
 <script>
@@ -80,7 +78,7 @@ export default {
     },
     handleBlogList () {
       var self = this
-      self.$axios.post('http://localhost:8443/api/findByNameLike', {
+      self.$axios.post('/api/findByNameLike', {
         username: this.input
       })
         .then(function (response) {
@@ -101,8 +99,10 @@ export default {
     },
     handleClick (row) {
       this.$router.push('/user/' + row.username + '/othersProfile')
+    },
+    handleClickUser (row) {
+      this.$router.push('/user/' + row.username + '/othersProfile')
     }
-
   }
 
 }

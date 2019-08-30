@@ -129,7 +129,7 @@ export default {
           } else {
             window.localStorage.setItem('bid', 'goudan')
             this.$axios
-              .post('http://localhost:8443/api/post', {
+              .post('/api/post', {
                 username: this.$store.state.user.username,
                 title: this.title,
                 content: $('#summernote').summernote('code'),

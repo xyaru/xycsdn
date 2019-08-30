@@ -1,25 +1,29 @@
 <template>
-  <div id="blog-list">
-    <h1>{{this.username}}的关注</h1>
-
-    <el-row :gutter="0" type="flex" justify="center">
-      <!-- 单个的卡片列 -->
-      <div class="container">
+  <div id="blog-list" style="width: 90%">
+    <h3 style="float: left">{{this.username}}的关注</h3>
+    <div style="clear: both;"></div>
+    <el-row :gutter="30">
+      <div class="container" v-if="show" style="float: left;width: 80%">
         <el-table style="width: 100%;"
-                  :data="blogList.slice((currentPage-1)*pagesize,currentPage*pagesize)"
-        >
+                  :data="blogList.slice((currentPage-1)*pagesize,currentPage*pagesize)">
           <el-table-column type="index" width="50">
           </el-table-column>
           <el-table-column label="user" prop="username" width="180">
+            <template slot-scope="scope">
+              <el-button @click="handleClickUser(scope.row)" type="text">{{scope.row.username}}</el-button>
+            </template>
           </el-table-column>
-          <el-table-column label="password" prop="password" width="180">
+          <el-table-column label="followNumber" prop="followNumber" width="180">
           </el-table-column>
-          <el-table-column label="操作" width="180">
+          <el-table-column label="fansNumber" prop="fansNumber" width="180">
+          </el-table-column>
+          <el-table-column label="操作" width="100">
             <template slot-scope="scope">
               <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
             </template>
           </el-table-column>
         </el-table>
+        <div style="clear: both"></div>
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
@@ -27,10 +31,20 @@
           :page-sizes="[5, 10, 20, 40]"
           :page-size="pagesize"
           layout="total, sizes, prev, pager, next, jumper"
-          :total="blogList.length">    //这是显示总共有多少数据，
+          style="float: left"
+          :total="blogList.length">
         </el-pagination>
       </div>
     </el-row>
+    <div v-if="!show">
+      <br>
+      <br>
+      <br>
+      <img src="../../../../assets/blank.png">
+      <br>
+      <br>
+      <p style="color: gray">空空如也</p>
+    </div>
   </div>
 </template>
 
@@ -42,7 +56,8 @@ export default {
       currentPage: 1,
       pagesize: 10,
       blogList: [],
-      username: this.$route.params.username
+      username: this.$route.params.username,
+      show: true
     }
   },
   created: function () {
@@ -59,13 +74,15 @@ export default {
     },
     handleBlogList () {
       var self = this
-      self.$axios.post('http://localhost:8443/api/returnMyfollow', {
+      self.$axios.post('/api/returnMyfollow', {
         username: this.username
       })
         .then(function (response) {
           if (response.data.code === 200) {
+            self.show = true
             self.blogList = response.data.data
           } else {
+            self.show = false
             self.$message({
               type: 'warning',
               message: 'no following'})

@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-container>
-      <el-aside width="200px">
+      <el-aside width="175px">
         <el-menu
           class="categories"
           background-color="transparent"
@@ -25,7 +25,7 @@
         </el-menu>
       </el-aside>
       <el-main class="content">
-        <router-view style="float: left;width: 70%"></router-view>
+        <router-view style="float: left"></router-view>
       </el-main>
     </el-container>
   </div>
@@ -58,7 +58,6 @@ export default {
 
 <style scoped>
   .categories {
-    position: fixed;
     width: 150px;
   }
   .textcolor {
