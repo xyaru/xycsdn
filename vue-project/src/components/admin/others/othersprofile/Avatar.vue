@@ -21,36 +21,13 @@ export default {
   },
   mounted () {
     this.checkFollowed()
-    this.showAvatar()
   },
   methods: {
-    showAvatar () {
-      var self = this
-      self.$axios.post('/api/myHead', {
-        username: self.userId
-      })
-        .then(successResponse => {
-          if (successResponse.data.code === 200) {
-            self.imgSrc = successResponse.data.data
-          } else {
-            this.$message({
-              type: 'warning',
-              message: '接收图片失败'
-            })
-          }
-        })
-        .catch(failResponse => {
-          this.$message({
-            type: 'error',
-            message: '服务器未响应'
-          })
-        })
-    },
     follow: function () {
       var self = this
       self.$axios.post('/api/followOne', {
-        usernameOne: self.myUserId,
-        usernameTwo: self.userId
+        usernameOne: this.myUserId,
+        usernameTwo: this.userId
       })
         .then(function (response) {
           if (response.data.code === 200) {
@@ -70,8 +47,8 @@ export default {
     unfollow: function () {
       var self = this
       self.$axios.post('/api/dfollowOne', {
-        usernameOne: self.myUserId,
-        usernameTwo: self.userId
+        usernameOne: this.myUserId,
+        usernameTwo: this.userId
       })
         .then(function (response) {
           if (response.data.code === 200) {
